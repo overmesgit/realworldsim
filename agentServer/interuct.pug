@@ -1,0 +1,17 @@
+span#money
+    <span>#{money}$</span>
+div(id=data.name hx-swap-oob="afterbegin")
+    div.flex-none.grow-0.w-12.rounded-full.border-2.tooltip(remove-me="40s" style={"border-color": color})
+        img.rounded-full(src="img/avatars/" + avatar)
+        span(role="tooltip" class="tooltiptext")
+            p #{data['action']}
+            p #{data['result']}
+div#agent(hx-swap-oob="afterbegin")
+    div.m-1.border-2.flex(remove-me="20s")
+        div.flex-none.w-32
+            img(src="img/avatars/" + avatar)
+        div.flex-none.w-40 #{data['username']}
+        div.flex-none.w-36 #{date}
+        div.flex-auto.flex
+            span(class="w-1/3") #{data['action']}
+            span(class="w-2/3" style={color: color}) #{data['result']}

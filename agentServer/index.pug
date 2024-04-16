@@ -1,0 +1,103 @@
+doctype html
+html(lang="en")
+  head
+    title Agent site
+    script(src="https://unpkg.com/htmx.org@1.9.11")
+    script(src="https://unpkg.com/htmx.org@1.9.11/dist/ext/ws.js")
+    script(src="https://unpkg.com/htmx.org@1.9.11/dist/ext/remove-me.js")
+    script(src="https://cdn.tailwindcss.com")
+    
+    style.
+       body::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        body::-webkit-scrollbar-track {
+            border-radius: 8px;
+            background-color: #e7e7e7;
+            border: 1px solid #cacaca;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            border-radius: 8px;
+            background-color: #6a80a3;
+        }
+        /* Tooltip container */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+        }
+        
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 240px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+        
+            /* Position the tooltip text */
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -120px;
+        
+            /* Fade in tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        /* Tooltip arrow */
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    script.
+        htmx.config.wsReconnectDelay = function (retryCount) {
+            return retryCount * 1000 // return value in milliseconds
+        }
+  body.container.mx-auto(hx-ext="ws, remove-me", ws-connect="/")
+    div.p-2.border-4.w-fit
+      h1.text-4xl Site Money: <span id="money"></span>
+    div.border-2.p-2.my-2.grid.grid-cols-5.justify-items-center
+        h3.text-xl Open site
+        h3.text-xl Visit main page      
+        h3.text-xl Sign Up / Sign In      
+        h3.text-xl Open Article      
+        h3.text-xl Write Article
+        div.w-52.flex.content-end.rounded-lg
+            img(src="/img/map/b1.png")
+        div.w-52.flex.content-end.rounded-lg
+            img(src="/img/map/b2.png")
+        div.w-52.flex.content-end.rounded-lg
+            img(src="/img/map/b3.png")
+        div.w-52.flex.content-end.rounded-lg
+            img(src="/img/map/b4.png")
+        div.w-52.flex.content-end.rounded-lg
+            img(src="/img/map/b5.png")
+        div#opensite.flex.flex-row.flex-wrap.w-full.content-start.my-4
+        div#mainpage.flex.flex-row.flex-wrap.w-full.content-start.my-4
+        div.w-full.my-4
+            div#signin.flex.flex-row.flex-wrap.w-full.content-start
+            div#signup.flex.flex-row.flex-wrap.w-full.content-start
+        div#openarticle.flex.flex-row.flex-wrap.w-full.content-start.my-4
+        div#writearticle.flex.flex-row.flex-wrap.w-full.content-start.my-4
+    div.my-2.border-4.rounded.flex.flex-col.w-auto.w-full.content-start
+      div#agent
+      
