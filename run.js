@@ -41,7 +41,7 @@ const INTERACTIONS = [
     new ProbableAction(OpenBlogPage, 1),
     new ProbableAction(CheckMainPageArticles, 1),
     new ProbableAction(OpenRandomArticle, 1),
-    new ProbableAction(new CheckAuth(WriteArticle), 0.3),
+    new ProbableAction(new CheckAuth(WriteArticle), 0.5),
 ];
 
 async function runInteruction(user, browser) {

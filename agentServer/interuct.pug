@@ -1,7 +1,7 @@
 span#money
     <span>#{money}$</span>
-div(id=data.name hx-swap-oob="afterbegin")
-    div.flex-none.grow-0.w-12.rounded-full.border-2.tooltip(remove-me="40s" style={"border-color": color})
+div(id=data.name+nextID hx-swap-oob="innerHTML")
+    div.rounded-full.border-2.tooltip.init(style={"border-color": color} classes="add animation")
         img.rounded-full(src="img/avatars/" + avatar)
         span(role="tooltip" class="tooltiptext")
             p #{data['action']}

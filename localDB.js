@@ -11,9 +11,6 @@ class LocalDB {
      * @param {Interaction} interuction
      */
     addInteruction(interuction) {
-        this.inteructions.push(
-            interuction
-        )
         this.money += interuction.reward;
         for (const listner of this.subscriber) {
             listner(interuction)

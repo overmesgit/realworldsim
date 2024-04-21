@@ -5,6 +5,7 @@ html(lang="en")
     script(src="https://unpkg.com/htmx.org@1.9.11")
     script(src="https://unpkg.com/htmx.org@1.9.11/dist/ext/ws.js")
     script(src="https://unpkg.com/htmx.org@1.9.11/dist/ext/remove-me.js")
+    script(src="https://unpkg.com/htmx.org@1.9.12/dist/ext/class-tools.js")
     script(src="https://cdn.tailwindcss.com")
     
     style.
@@ -68,36 +69,41 @@ html(lang="en")
             visibility: visible;
             opacity: 1;
         }
+
+        .init {
+            transform: translateY(-800px);
+            transition: transform 1s;
+        }
+        .animation {
+            transform: translateY(0);
+        }
+
     script.
         htmx.config.wsReconnectDelay = function (retryCount) {
             return retryCount * 1000 // return value in milliseconds
         }
-  body.container.mx-auto(hx-ext="ws, remove-me", ws-connect="/")
+  body.container.mx-auto(hx-ext="ws, remove-me, class-tools" ws-connect="/")
     div.p-2.border-4.w-fit
       h1.text-4xl Site Money: <span id="money"></span>
-    div.border-2.p-2.my-2.grid.grid-cols-5.justify-items-center
+    div.border-2.p-2.my-2.grid.grid-cols-5.gap-1.justify-items-center
         h3.text-xl Open site
         h3.text-xl Visit main page      
-        h3.text-xl Sign Up / Sign In      
         h3.text-xl Open Article      
         h3.text-xl Write Article
-        div.w-52.flex.content-end.rounded-lg
-            img(src="/img/map/b1.png")
-        div.w-52.flex.content-end.rounded-lg
-            img(src="/img/map/b2.png")
-        div.w-52.flex.content-end.rounded-lg
-            img(src="/img/map/b3.png")
-        div.w-52.flex.content-end.rounded-lg
-            img(src="/img/map/b4.png")
-        div.w-52.flex.content-end.rounded-lg
-            img(src="/img/map/b5.png")
-        div#opensite.flex.flex-row.flex-wrap.w-full.content-start.my-4
-        div#mainpage.flex.flex-row.flex-wrap.w-full.content-start.my-4
-        div.w-full.my-4
-            div#signin.flex.flex-row.flex-wrap.w-full.content-start
-            div#signup.flex.flex-row.flex-wrap.w-full.content-start
-        div#openarticle.flex.flex-row.flex-wrap.w-full.content-start.my-4
-        div#writearticle.flex.flex-row.flex-wrap.w-full.content-start.my-4
+        h3.text-xl Sign Up / Sign In
+        - var mapList = ["b1", "b2", "b3", "b4", "b5"]
+        - var list = ["opensite", "mainpage", "openarticle", "writearticle"]
+        each item, index in list
+            div.w-full.my-4.pb-20.grid.grid-cols-6.content-start.relative(id=item)
+                img.rounded-lg.absolute.bottom-0.left-20.w-40(src="/img/map/"+ mapList[index] + ".png")
+                - for (var x = 0; x < 48; x++)
+                    div.w-12.h-12(id=item+x)
+        div.w-full.my-4.pb-20.grid.grid-cols-6.content-start.relative
+            img.rounded-lg.absolute.bottom-0.left-20.w-40(src="/img/map/"+ mapList.slice(-1) + ".png")
+            - var list = ["signup", "signin"]
+                each item in list
+                    - for (var x = 0; x < 24; x++)
+                        div.w-12.h-12(id=item+x)
     div.my-2.border-4.rounded.flex.flex-col.w-auto.w-full.content-start
       div#agent
       
