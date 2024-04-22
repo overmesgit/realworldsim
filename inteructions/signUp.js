@@ -5,7 +5,8 @@ import SignIn from "./signIn.js";
 
 export class CheckAuth {
     constructor(action) {
-        this.action = action;
+        this.action = action.action;
+        this.actionObj = action;
     }
 
     run(page, UserData) {
@@ -16,7 +17,7 @@ export class CheckAuth {
         if (!UserData.signin) {
             return SignIn.run(page, UserData)
         }
-        return this.action.run(page, UserData)
+        return this.actionObj.run(page, UserData)
     }
 }
 

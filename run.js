@@ -29,8 +29,13 @@ const INTERACTIONS = [
     new ProbableAction(OpenRandomArticle, 1),
     new ProbableAction(new MultipleActions(OpenRandomPage, OpenRandomArticle), 1),
     new ProbableAction(new CheckAuth(WriteArticle), 1),
-    new ProbableAction(new CheckAuth(new MultipleActions(OpenRandomPage, OpenRandomArticle, WriteComment)), 1),
+    new ProbableAction(
+        new CheckAuth(
+            new MultipleActions(OpenRandomPage, OpenRandomArticle, WriteComment)
+        ), 1
+    ),
 ]
+
 
 async function runInteruction(user, browser) {
     let context = await browser.createBrowserContext();
@@ -44,10 +49,11 @@ async function runInteruction(user, browser) {
             const interaction = await action.run(page, user);
             localDB.addInteruction(interaction);
         } catch (e) {
-            console.log("action error main", action.action, e.message, e)
+            localDB.addInteruction(new Interaction(action.name, user.name, user.id, action.action, "Can't open site.", 0, RESULT_TYPE.NEGATIVE));
+            console.log("action error main", action.action, e.message)
         }
         await page.close();
-        await sleep(1000);
+        await sleep(2000);
         if (Math.random() > 0.9) {
             context.close()
             context = await browser.createBrowserContext();

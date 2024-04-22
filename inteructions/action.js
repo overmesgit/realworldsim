@@ -32,12 +32,12 @@ export default class Action {
             res = await this.func(page, UserData, SiteData);
         } catch (e) {
             console.log("action error run", this.action, e.message, e)
-            return {}
+            res = {error: true, data: {errorMessage: e.message}}
         }
 
-        message = replaceTemplate(this.action, res['data']);
+        message = replaceTemplate(this.action, res.data);
         const resultTemplate = res.error ? this.fail : this.success;
-        result = replaceTemplate(resultTemplate, res['data']);
+        result = replaceTemplate(resultTemplate, res.data);
         if (!res.error) {
             resultType = RESULT_TYPE.POSITIVE;
             reward = this.reward;

@@ -7,6 +7,7 @@ class MultipleActions {
      */
     constructor(...actions) {
         this.actions = actions;
+        this.action = actions.slice(-1)[0].action
     }
 
     async run(page, UserData, SiteData, AdditionalData) {
