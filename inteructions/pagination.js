@@ -3,29 +3,33 @@ import {RESULT_TYPE} from "../localDB.js";
 
 class MultipleActions {
     /**
-     * @param {Action} actionOne
-     * @param {Action} actionTwo
+     * @param {Action} actions
      */
-    constructor(actionOne, actionTwo) {
-        this.actionOne = actionOne;
-        this.acthionTwo = actionTwo;
+    constructor(...actions) {
+        this.actions = actions;
     }
 
     async run(page, UserData, SiteData, AdditionalData) {
-        const firstResult = await this.actionOne.run(page, UserData, SiteData, AdditionalData)
-        if (firstResult.result_type === RESULT_TYPE.NEGATIVE) {
-            return firstResult
+        let prevResult = null;
+        let result = null;
+        for (let action of this.actions) {
+            result = await action.run(page, UserData, SiteData, AdditionalData)
+            if (prevResult) {
+                result.action = prevResult.action + " " + result.action;
+                result.result = prevResult.result + " " + result.result;
+            }
+            if (result.result_type === RESULT_TYPE.NEGATIVE) {
+                return result
+            }
+            prevResult = result;
         }
-        const secondResult = await this.acthionTwo.run(page, UserData, SiteData, AdditionalData)
-        secondResult.action = firstResult.action + " " + secondResult.action;
-        secondResult.result = firstResult.result + " " + secondResult.result;
-        return secondResult;
+        return result;
     }
 }
 
 async function openRandomPage(page, UserData) {
-    const element = await page.waitForSelector('title', {timeout: 400});
-    const pageNumber = await page.evaluate(() => {
+    await page.waitForSelector('title', {timeout: 400});
+    const [pageNumber, total] = await page.evaluate(() => {
         const allPages = document.querySelectorAll('#pagination a');
         let pageNumber = null;
         if (allPages.length > 0) {
@@ -33,7 +37,7 @@ async function openRandomPage(page, UserData) {
             pageNumber = selectedArticle.textContent;
             selectedArticle.click();
         }
-        return pageNumber
+        return [pageNumber, allPages.length]
 
     });
     if (pageNumber === null) {
@@ -41,7 +45,7 @@ async function openRandomPage(page, UserData) {
     }
 
     return {
-        "data": {"pageNumber": pageNumber},
+        "data": {pageNumber, total},
         "error": false
     };
 }
@@ -49,7 +53,7 @@ async function openRandomPage(page, UserData) {
 const OpenRandomPage = new Action(
     'mainpage',
     'Decided to open random page.🎉',
-    'Successfully opened the page number "{{pageNumber}}".',
+    'Successfully opened page {{pageNumber}} from {{total}} pages.',
     "😣 Couldn't open random page. {{errorDescription}}",
     openRandomPage,
     0.1,

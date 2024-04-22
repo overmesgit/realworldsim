@@ -9,7 +9,7 @@ async function writeArticle(page, UserData) {
     let errorDescription = '';
 
     try {
-        await page.goto('http://127.0.0.1:8080/');
+        await page.waitForSelector('title', {timeout: 400});
         errorDescription = CantFind("button for creating new article.")
         const newArticle = await page.waitForSelector('a#new-article', {timeout: 200});
         await newArticle.click(newArticle);
@@ -24,8 +24,8 @@ async function writeArticle(page, UserData) {
 
         errorDescription = CantFind("button for submit.")
         const createArticle = await page.waitForSelector('button#save', {timeout: 100});
-
         await createArticle.click(createArticle);
+        
         const createResponse = await page.waitForResponse(response =>
             response.request().method() === 'POST'
         );

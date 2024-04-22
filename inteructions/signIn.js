@@ -6,7 +6,7 @@ async function signInAction(page, UserData) {
     let errorDescription = '';
 
     try {
-        await page.goto('http://127.0.0.1:8080/');
+        await page.waitForSelector('title', {timeout: 400});
         errorDescription = CantFind("link for signing in.")
         const singUpLink = await page.waitForSelector('a#sign-in', {timeout: 200});
         await singUpLink.click(singUpLink);

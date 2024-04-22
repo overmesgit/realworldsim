@@ -85,14 +85,15 @@ html(lang="en")
   body.container.mx-auto(hx-ext="ws, remove-me, class-tools" ws-connect="/")
     div.p-2.border-4.w-fit
       h1.text-4xl Site Money: <span id="money"></span>
-    div.border-2.p-2.my-2.grid.grid-cols-5.gap-1.justify-items-center
+    div.border-2.p-2.my-2.grid.grid-cols-6.gap-1.justify-items-center
         h3.text-xl Open site
         h3.text-xl Visit main page      
         h3.text-xl Open Article      
         h3.text-xl Write Article
+        h3.text-xl Write comment
         h3.text-xl Sign Up / Sign In
-        - var mapList = ["b1", "b2", "b3", "b4", "b5"]
-        - var list = ["opensite", "mainpage", "openarticle", "writearticle"]
+        - var mapList = ["b1", "b2", "b3", "b4", "b5", "b6"]
+        - var list = ["opensite", "mainpage", "openarticle", "writearticle", "writecomment"]
         each item, index in list
             div.w-full.my-4.pb-20.grid.grid-cols-6.content-start.relative(id=item)
                 img.rounded-lg.absolute.bottom-0.left-20.w-40(src="/img/map/"+ mapList[index] + ".png")

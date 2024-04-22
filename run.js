@@ -3,12 +3,13 @@ import RunServer from "./agentServer/server.js";
 import OpenBlogPage from "./inteructions/openSite.js";
 import WriteArticle from "./inteructions/writeArticle.js";
 import CheckMainPageArticles from "./inteructions/mainPageArticles.js";
-import {getRandomObjectByDistribution, randomElement, sleep} from "./helpers.js";
+import {getRandomInt, getRandomObjectByDistribution, randomElement, sleep} from "./helpers.js";
 import OpenRandomArticle from "./inteructions/openArticle.js";
 import User from "./user.js";
 import {CheckAuth} from "./inteructions/signUp.js";
 import {Interaction, RESULT_TYPE, localDB} from "./localDB.js";
 import {MultipleActions, OpenRandomPage} from "./inteructions/pagination.js";
+import WriteComment from "./inteructions/writeComment.js";
 
 
 class ProbableAction {
@@ -27,12 +28,12 @@ const INTERACTIONS = [
     new ProbableAction(new MultipleActions(OpenRandomPage, CheckMainPageArticles), 1),
     new ProbableAction(OpenRandomArticle, 1),
     new ProbableAction(new MultipleActions(OpenRandomPage, OpenRandomArticle), 1),
-    new ProbableAction(new CheckAuth(WriteArticle), 0.5),
-];
+    new ProbableAction(new CheckAuth(WriteArticle), 1),
+    new ProbableAction(new CheckAuth(new MultipleActions(OpenRandomPage, OpenRandomArticle, WriteComment)), 1),
+]
 
 async function runInteruction(user, browser) {
-    // TODO: logout
-    const context = await browser.createBrowserContext();
+    let context = await browser.createBrowserContext();
     while (true) {
         const page = await context.newPage();
         await page.setViewport({width: 1080, height: 1024});
@@ -46,7 +47,12 @@ async function runInteruction(user, browser) {
             console.log("action error main", action.action, e.message, e)
         }
         await page.close();
-        await sleep(3000);
+        await sleep(1000);
+        if (Math.random() > 0.9) {
+            context.close()
+            context = await browser.createBrowserContext();
+            user.signin = false;
+        }
     }
     await context.close();
 }

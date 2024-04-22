@@ -1,7 +1,6 @@
 import Action from "./action.js";
 
 async function openBlogPage(page) {
-    await page.goto('http://127.0.0.1:8080/');
     const element = await page.waitForSelector('title', {timeout: 400});
     let title = await element?.evaluate(el => el.textContent);
     return {"data": {"title": title}, "error": false};
