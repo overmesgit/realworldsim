@@ -1,5 +1,24 @@
 import Action from "./action.js";
 import {CantFind, getFormErrors} from "./helpers.js";
+import SignIn from "./signIn.js";
+
+
+export class CheckAuth {
+    constructor(action) {
+        this.action = action;
+    }
+
+    run(page, UserData) {
+        if (!UserData.signup && !UserData.checkSignup && !UserData.signin) {
+            UserData.checkSignup = true;
+            return SignUp.run(page, UserData)
+        }
+        if (!UserData.signin) {
+            return SignIn.run(page, UserData)
+        }
+        return this.action.run(page, UserData)
+    }
+}
 
 
 async function signUpAction(page, UserData) {
@@ -44,12 +63,10 @@ async function signUpAction(page, UserData) {
     return {data: {username: UserData.username, errorDescription}, error: error};
 }
 
-const SignUp = new Action(
+export const SignUp = new Action(
     "signup",
     "Decided it was time to join the community, so I went ahead to sign up with user name {{username}}.🌟",
     "Just signed up with username {{username}}! The process was super smooth, and I'm excited to be a part of this community. 🎉",
     "Tried to sign up, but it kept giving me errors. Not sure what's going wrong. 😕{{errorDescription}}",
     signUpAction
 )
-
-export default SignUp;

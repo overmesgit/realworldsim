@@ -1,4 +1,4 @@
-import {Interaction, RESULT_TYPE, localDB} from "../localDB.js";
+import {Interaction, RESULT_TYPE} from "../localDB.js";
 
 function replaceTemplate(message, data) {
     for (const key in data) {
@@ -8,12 +8,6 @@ function replaceTemplate(message, data) {
 }
 
 export default class Action {
-    action;
-    success;
-    fail;
-    func;
-    reward;
-
     constructor(name, action, success, fail, func, reward) {
         this.name = name;
         this.action = action;
@@ -27,30 +21,30 @@ export default class Action {
      * @param {Object} page
      * @param {User} UserData
      * @param {Object} [SiteData]
+     * @param {Object} [AdditionalData]
+     * @returns {Interaction}
      */
-    async run(page, UserData, SiteData) {
+    async run(page, UserData, SiteData, AdditionalData) {
         let message, result, resultType = '';
-        let error = null;
         let reward = 0;
         let res = {'data': {}, error: true};
         try {
             res = await this.func(page, UserData, SiteData);
         } catch (e) {
             console.log("action error run", this.action, e.message, e)
-            return
+            return {}
         }
 
         message = replaceTemplate(this.action, res['data']);
-        error = res['error'];
-        const resultTemplate = error ? this.fail : this.success;
+        const resultTemplate = res.error ? this.fail : this.success;
         result = replaceTemplate(resultTemplate, res['data']);
-        if (!error) {
+        if (!res.error) {
             resultType = RESULT_TYPE.POSITIVE;
             reward = this.reward;
         } else {
             resultType = RESULT_TYPE.NEGATIVE;
         }
-        localDB.addInteruction(new Interaction(this.name, UserData.name, UserData.id, message, result, reward, resultType));
+        return new Interaction(this.name, UserData.name, UserData.id, message, result, reward, resultType)
     }
 
 }

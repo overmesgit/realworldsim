@@ -80,7 +80,7 @@ html(lang="en")
 
     script.
         htmx.config.wsReconnectDelay = function (retryCount) {
-            return retryCount * 1000 // return value in milliseconds
+            return 1000 // return value in milliseconds
         }
   body.container.mx-auto(hx-ext="ws, remove-me, class-tools" ws-connect="/")
     div.p-2.border-4.w-fit

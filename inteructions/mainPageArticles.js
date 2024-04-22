@@ -2,7 +2,7 @@ import Action from "./action.js";
 
 
 async function checkArticles(page) {
-    await page.goto('http://127.0.0.1:8080/');
+    await page.waitForSelector('title', {timeout: 400});
     const elements = await page.evaluate(() => Array.from(document.querySelectorAll('.article .title')));
     const metrics = await page.metrics();
     return {"data": {"count": elements.length, "renderingTime": metrics.TaskDuration.toFixed(2)}, "error": false};

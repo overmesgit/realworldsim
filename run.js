@@ -6,8 +6,9 @@ import CheckMainPageArticles from "./inteructions/mainPageArticles.js";
 import {getRandomObjectByDistribution, randomElement, sleep} from "./helpers.js";
 import OpenRandomArticle from "./inteructions/openArticle.js";
 import User from "./user.js";
-import SignUp from "./inteructions/signUp.js";
-import SignIn from "./inteructions/signIn.js";
+import {CheckAuth} from "./inteructions/signUp.js";
+import {Interaction, RESULT_TYPE, localDB} from "./localDB.js";
+import {MultipleActions, OpenRandomPage} from "./inteructions/pagination.js";
 
 
 class ProbableAction {
@@ -20,27 +21,12 @@ class ProbableAction {
     }
 }
 
-class CheckAuth {
-    constructor(action) {
-        this.action = action;
-    }
-
-    run(page, UserData) {
-        if (!UserData.signup && !UserData.checkSignup && !UserData.signin) {
-            UserData.checkSignup = true;
-            return SignUp.run(page, UserData)
-        }
-        if (!UserData.signin) {
-            return SignIn.run(page, UserData)
-        }
-        return this.action.run(page, UserData)
-    }
-}
-
 const INTERACTIONS = [
     new ProbableAction(OpenBlogPage, 1),
     new ProbableAction(CheckMainPageArticles, 1),
+    new ProbableAction(new MultipleActions(OpenRandomPage, CheckMainPageArticles), 1),
     new ProbableAction(OpenRandomArticle, 1),
+    new ProbableAction(new MultipleActions(OpenRandomPage, OpenRandomArticle), 1),
     new ProbableAction(new CheckAuth(WriteArticle), 0.5),
 ];
 
@@ -53,12 +39,14 @@ async function runInteruction(user, browser) {
 
         let action = getRandomObjectByDistribution(INTERACTIONS)
         try {
-            await action.run(page, user);
+            await page.goto('http://127.0.0.1:8080/');
+            const interaction = await action.run(page, user);
+            localDB.addInteruction(interaction);
         } catch (e) {
             console.log("action error main", action.action, e.message, e)
         }
         await page.close();
-        await sleep(1000);
+        await sleep(3000);
     }
     await context.close();
 }

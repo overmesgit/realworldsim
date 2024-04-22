@@ -1,7 +1,7 @@
 import Action from "./action.js";
 
 async function openArticle(page, UserData) {
-    await page.goto('http://127.0.0.1:8080/');
+    await page.waitForSelector('title', {timeout: 400})
     const clickedArticleTitle = await page.evaluate(() => {
         const allArticles = document.querySelectorAll('.article .title');
         let articleName = null;
