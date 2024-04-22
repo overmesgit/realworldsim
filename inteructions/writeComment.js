@@ -24,8 +24,8 @@ async function writeComment(page) {
                 res.push(e.textContent)
             })
             return res;
-        });
-        if (allComments.indexOf(newComment) < 0) {
+        })
+        if (!allComments.find((c) => c.includes(newComment))) {
             return {"data": {"errorDescription": " I'm not seeing my comment."}, "error": true};
         }
     } catch (e) {

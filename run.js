@@ -32,7 +32,7 @@ const INTERACTIONS = [
     new ProbableAction(
         new CheckAuth(
             new MultipleActions(OpenRandomPage, OpenRandomArticle, WriteComment)
-        ), 1
+        ), 2
     ),
 ]
 
