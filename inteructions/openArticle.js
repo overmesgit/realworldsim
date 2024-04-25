@@ -32,8 +32,20 @@ async function openArticle(page, UserData) {
         return {"data": {"errorDescription": " I don't see content of the article."}, "error": true};
     }
 
+    const commentsCount = await page.evaluate(() => {
+        return document.querySelectorAll('.comment').length;
+    })
+    let aboutComments = ""
+    if (commentsCount > 0) {
+        aboutComments = `There is interesting discussion with ${commentsCount} comments.`
+    }
+
     return {
-        "data": {"title": clickedArticleTitle, "content": content.split(" ").slice(0, 5).join(" ") + "..."},
+        "data": {
+            "title": clickedArticleTitle,
+            "content": content.split(" ").slice(0, 5).join(" ") + "...",
+            aboutComments
+        },
         "error": false
     };
 }
@@ -41,7 +53,7 @@ async function openArticle(page, UserData) {
 const OpenRandomArticle = new Action(
     'openarticle',
     'Decided to open random article from the main page.👀',
-    'Successfully opened the article titled "{{title}}" and read its content: "{{content}}"',
+    'Successfully opened the article titled "{{title}}" and read its content: "{{content}}".{{aboutComments}}',
     "😣 Couldn't open random article. {{errorDescription}}",
     openArticle,
     1,

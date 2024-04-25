@@ -27,7 +27,7 @@ function GetNextID(currentIndex, name) {
     if (currentIndex.has(name)) {
         nextID = currentIndex.get(name);
     }
-    currentIndex.set(name, (nextID + 1) % 48)
+    currentIndex.set(name, (nextID + 1) % 36)
     return nextID;
 }
 

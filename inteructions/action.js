@@ -44,7 +44,9 @@ export default class Action {
         } else {
             resultType = RESULT_TYPE.NEGATIVE;
         }
-        return new Interaction(this.name, UserData.name, UserData.id, message, result, reward, resultType)
+        await page.waitForSelector('title', {timeout: 400})
+        const screenshot = await page.screenshot({encoding: 'base64'})
+        return new Interaction(this.name, UserData.name, UserData.id, message, result, reward, resultType, screenshot)
     }
 
 }

@@ -7,11 +7,22 @@ div(id=data.name+nextID hx-swap-oob="innerHTML")
             p #{data['action']}
             p #{data['result']}
 div#agent(hx-swap-oob="afterbegin")
-    div.m-1.border-2.flex(remove-me="20s")
-        div.flex-none.w-32
-            img(src="img/avatars/" + avatar)
-        div.flex-none.w-40 #{data['username']}
-        div.flex-none.w-36 #{date}
-        div.flex-auto.flex
-            span(class="w-1/3") #{data['action']}
-            span(class="w-2/3" style={color: color}) #{data['result']}
+    div.m-1.border-2(remove-me="20s")
+        div.flex(remove-me="20s" onclick="modal" + data.name+nextID + ".showModal()")
+            div.flex-none.w-32
+                img(src="img/avatars/" + avatar)
+            div.flex-none.w-40 #{data['username']}
+            div.flex-none.w-36 #{date}
+            div.flex-auto.flex
+                span(class="w-1/3") #{data['action']}
+                span(class="w-2/3" style={color: color}) #{data['result']}
+        dialog(id="modal" + data.name+nextID class="modal")
+            <div class="modal-box max-w-none w-1/2">
+                img(src="data:image/png;base64, "+data.screenshot alt="Screenshot")
+                <div class="modal-action">
+                    <form method="dialog">
+                        <button class="btn">Close</button>
+                    </form>
+                </div>
+            </div>
+    </dialog>

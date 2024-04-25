@@ -7,6 +7,8 @@ html(lang="en")
     script(src="https://unpkg.com/htmx.org@1.9.11/dist/ext/remove-me.js")
     script(src="https://unpkg.com/htmx.org@1.9.12/dist/ext/class-tools.js")
     script(src="https://cdn.tailwindcss.com")
+    link(href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css" rel="stylesheet" type="text/css")
+    script(src="https://cdn.tailwindcss.com")
     
     style.
        body::-webkit-scrollbar {
@@ -97,13 +99,14 @@ html(lang="en")
         each item, index in list
             div.w-full.my-4.pb-20.grid.grid-cols-6.content-start.relative(id=item)
                 img.rounded-lg.absolute.bottom-0.left-20.w-40(src="/img/map/"+ mapList[index] + ".png")
-                - for (var x = 0; x < 48; x++)
+                - for (var x = 0; x < 36; x++)
                     div.w-12.h-12(id=item+x)
         div.w-full.my-4.pb-20.grid.grid-cols-6.content-start.relative
             img.rounded-lg.absolute.bottom-0.left-20.w-40(src="/img/map/"+ mapList.slice(-1) + ".png")
             - var list = ["signup", "signin"]
                 each item in list
-                    - for (var x = 0; x < 24; x++)
+                    // BUG if interuction is over 36
+                    - for (var x = 0; x < 18; x++)
                         div.w-12.h-12(id=item+x)
     div.my-2.border-4.rounded.flex.flex-col.w-auto.w-full.content-start
       div#agent

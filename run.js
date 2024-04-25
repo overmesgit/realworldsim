@@ -49,7 +49,7 @@ async function runInteruction(user, browser) {
             const interaction = await action.run(page, user);
             localDB.addInteruction(interaction);
         } catch (e) {
-            localDB.addInteruction(new Interaction(action.name, user.name, user.id, action.action, "Can't open site.", 0, RESULT_TYPE.NEGATIVE));
+            localDB.addInteruction(new Interaction(action.name, user.name, user.id, action.action, "Can't open site.", 0, RESULT_TYPE.NEGATIVE, null));
             console.log("action error main", action.action, e.message)
         }
         await page.close();

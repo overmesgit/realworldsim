@@ -34,14 +34,16 @@ export class Interaction {
      * @param {string} result
      * @param {number} reward
      * @param {string} result_type
+     * @param {string} screenshot
      */
-    constructor(name, username, userid, action, result, reward, result_type) {
+    constructor(name, username, userid, action, result, reward, result_type, screenshot) {
         this.name = name;
         this.username = username;
         this.userid = userid;
         this.action = action;
         this.result = result;
         this.reward = reward;
+        this.screenshot = screenshot;
         this.time = new Date();
         this.result_type = result_type;
     }
